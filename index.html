@@ -1,1 +1,1569 @@
-index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuka Yamo Specialized Diagnosis Friend</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 50%, #8B7355 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .company-info {
+            background: #8B7355;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+
+        .quick-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background: #f5f5f5;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            padding: 12px 24px;
+            background: #4a7c2c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+
+        .quick-btn:hover {
+            background: #2d5016;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            padding: 40px 60px;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .mode-card {
+            flex: 1;
+            max-width: 400px;
+            padding: 30px;
+            border: 3px solid #4a7c2c;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mode-card:hover {
+            background: #f0f8f0;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(74, 124, 44, 0.3);
+        }
+
+        .mode-card.selected {
+            background: #4a7c2c;
+            color: white;
+        }
+
+        .mode-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .diagnosis-form {
+            display: none;
+            background: #f9f9f9;
+            padding: 40px 50px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .diagnosis-form.active {
+            display: block;
+        }
+
+        .form-section {
+            background: white;
+            padding: 35px 40px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #4a7c2c;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .form-section h3 {
+            color: #2d5016;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .body-icon {
+            font-size: 1.8em;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2d5016;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #4a7c2c;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #2d5016;
+            box-shadow: 0 0 0 3px rgba(74, 124, 44, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #4a7c2c 0%, #2d5016 100%);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3em;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(74, 124, 44, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #4a7c2c;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-steps {
+            margin-top: 20px;
+            color: #2d5016;
+            font-size: 1.1em;
+        }
+
+        .loading-step {
+            margin: 10px 0;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .loading-step.active {
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        .results {
+            display: none;
+            background: white;
+            padding: 40px 50px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 3px solid #4a7c2c;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .result-header {
+            background: #4a7c2c;
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .result-section {
+            margin-bottom: 25px;
+            padding: 25px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border-left: 5px solid #4a7c2c;
+        }
+
+        .result-section h3 {
+            color: #2d5016;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 1.05em;
+        }
+
+        .treatment-protocol {
+            background: #e8f5e9;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .treatment-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #4a7c2c;
+        }
+
+        .new-diagnosis-btn {
+            background: #8B7355;
+            color: white;
+            padding: 15px 35px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .new-diagnosis-btn:hover {
+            background: #6d5a43;
+            transform: translateY(-2px);
+        }
+
+        .code-display {
+            background: #2d5016;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.4em;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            padding: 20px 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .progress-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: #e0e0e0;
+            position: relative;
+            font-size: 0.9em;
+        }
+
+        .progress-step.active {
+            background: #4a7c2c;
+            color: white;
+            font-weight: 600;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            color: #4a7c2c;
+        }
+
+        @media (max-width: 768px) {
+            .mode-selector {
+                flex-direction: column;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-indicator {
+                flex-direction: column;
+            }
+
+            .progress-step:not(:last-child)::after {
+                content: '↓';
+                right: 50%;
+                top: auto;
+                bottom: -20px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .diagnosis-form {
+                padding: 20px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+
+            .results {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+                    <div class="header">
+            <h1>🌿 Ayuka Yamo Specialized Diagnosis Friend</h1>
+            <p>AI-Powered Precise Health Diagnosis System</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Combining Professional Human Expertise with Advanced AI Technology</p>
+        </div>
+
+        <div class="company-info">
+            <strong>Tau-Africa</strong> | Valenta Holdings Ltd | Professional Homeopathy, Allopathy & Naturopathy Centers<br>
+            <small style="opacity: 0.9;">Evaluated by experienced doctors with years of expertise in integrated medicine</small>
+        </div>
+
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="alert('Feature coming soon! Contact: info@tau-africa.com')">👨‍⚕️ See Doctor</button>
+            <button class="quick-btn" onclick="alert('Feature coming soon! Call: +XXX XXX XXXX')">📅 Schedule Appointment</button>
+            <button class="quick-btn" onclick="alert('Feature coming soon! Visit our store')">🛒 Buy AY Product</button>
+            <button class="quick-btn" onclick="alert('Email: contact@ayukayamo.com | Phone: +XXX XXX XXXX')">📞 Contact Us</button>
+        </div>
+
+        <div class="main-content">
+            <div class="mode-selector">
+                <div class="mode-card" onclick="selectMode('client')">
+                    <h3>💳 Paid Client Diagnosis</h3>
+                    <p>Get precise diagnosis for unknown health conditions or confirm suspected diseases</p>
+                    <p style="margin-top: 10px; font-weight: bold;">Professional Analysis with AI</p>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">Comprehensive body-system evaluation</p>
+                </div>
+
+                <div class="mode-card" onclick="selectMode('doctor')">
+                    <h3>⚕️ Doctor Portal</h3>
+                    <p>Access diagnosis reports and generate treatment protocols</p>
+                    <p style="margin-top: 10px; font-weight: bold;">Treatment Planning System</p>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;">Automated protocol generation</p>
+                </div>
+            </div>
+
+            <!-- Client Diagnosis Form -->
+            <div id="clientForm" class="diagnosis-form">
+                <div class="progress-indicator">
+                    <div class="progress-step active">Basic Info</div>
+                    <div class="progress-step">Body Systems</div>
+                    <div class="progress-step">AI Analysis</div>
+                    <div class="progress-step">Results</div>
+                </div>
+
+                <div class="info-box">
+                    📋 <strong>Instructions:</strong> Please fill in all sections carefully. The more detailed your information, the more accurate the AI diagnosis will be. Your responses will be evaluated by our AI system in conjunction with professional medical protocols developed by experienced doctors specializing in homeopathy, allopathy, and naturopathy. Focus on specific symptoms in each body region for optimal results.
+                </div>
+
+                <!-- Basic Information Section -->
+                <div class="form-section">
+                    <h3><span class="body-icon">👤</span> Basic Patient Information</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Diagnosis Code (if provided by AY Agent):</label>
+                            <input type="text" id="diagnosisCode" placeholder="Enter code if you have one">
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Confirmation (if applicable):</label>
+                            <input type="text" id="paymentCode" placeholder="Payment reference number">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Patient Full Name: *</label>
+                            <input type="text" id="patientName" required placeholder="First and last name">
+                        </div>
+                        <div class="form-group">
+                            <label>Age: *</label>
+                            <input type="number" id="age" required placeholder="Age in years">
+                        </div>
+                        <div class="form-group">
+                            <label>Gender: *</label>
+                            <select id="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Weight (kg):</label>
+                            <input type="number" id="weight" placeholder="Current weight">
+                        </div>
+                        <div class="form-group">
+                            <label>Height (cm):</label>
+                            <input type="number" id="height" placeholder="Height">
+                        </div>
+                        <div class="form-group">
+                            <label>Blood Type (if known):</label>
+                            <select id="bloodType">
+                                <option value="">Select blood type</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Head Region -->
+                <div class="form-section">
+                    <h3><span class="body-icon">🧠</span> Head & Neurological Region</h3>
+                    
+                    <div class="form-group">
+                        <label>Head Symptoms:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="headache" name="head" value="headache">
+                                <label for="headache">Headache</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="migraine" name="head" value="migraine">
+                                <label for="migraine">Migraine</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dizziness" name="head" value="dizziness">
+                                <label for="dizziness">Dizziness</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="memory" name="head" value="memory">
+                                <label for="memory">Memory Issues</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="confusion" name="head" value="confusion">
+                                <label for="confusion">Confusion</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="seizures" name="head" value="seizures">
+                                <label for="seizures">Seizures</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Vision Problems:</label>
+                            <textarea id="visionIssues" placeholder="Blurred vision, double vision, light sensitivity, etc."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Hearing/Ear Issues:</label>
+                            <textarea id="hearingIssues" placeholder="Ringing, pain, discharge, hearing loss, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nose/Sinus Issues:</label>
+                            <textarea id="noseIssues" placeholder="Congestion, bleeding, loss of smell, sinus pain, etc."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Mouth/Throat Issues:</label>
+                            <textarea id="mouthIssues" placeholder="Sore throat, difficulty swallowing, mouth sores, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Head Region Details (Duration, Intensity, Triggers):</label>
+                        <textarea id="headDetails" placeholder="When did symptoms start? How severe (1-10)? What makes it better or worse?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Chest/Respiratory Region -->
+                <div class="form-section">
+                    <h3><span class="body-icon">🫁</span> Chest, Heart & Respiratory System</h3>
+                    
+                    <div class="form-group">
+                        <label>Chest/Heart Symptoms:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="chestPain" name="chest" value="chestPain">
+                                <label for="chestPain">Chest Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="palpitations" name="chest" value="palpitations">
+                                <label for="palpitations">Heart Palpitations</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="breathShortness" name="chest" value="breathShortness">
+                                <label for="breathShortness">Shortness of Breath</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cough" name="chest" value="cough">
+                                <label for="cough">Persistent Cough</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="wheezing" name="chest" value="wheezing">
+                                <label for="wheezing">Wheezing</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="tightness" name="chest" value="tightness">
+                                <label for="tightness">Chest Tightness</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Breathing Difficulties:</label>
+                            <textarea id="breathingDetails" placeholder="At rest or during activity? Any wheezing sounds? Oxygen level if known"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Cough Details:</label>
+                            <textarea id="coughDetails" placeholder="Dry or productive? Color of phlegm? Blood present? When worse?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chest Region Details (Duration, Intensity, Associated Symptoms):</label>
+                        <textarea id="chestDetails" placeholder="Pain location? Radiating? Associated with exercise? Any fever or fatigue?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Abdominal Region -->
+                <div class="form-section">
+                    <h3><span class="body-icon">🫃</span> Abdominal & Digestive System</h3>
+                    
+                    <div class="form-group">
+                        <label>Abdominal Symptoms:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="stomachPain" name="abdomen" value="stomachPain">
+                                <label for="stomachPain">Stomach Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="nausea" name="abdomen" value="nausea">
+                                <label for="nausea">Nausea</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="vomiting" name="abdomen" value="vomiting">
+                                <label for="vomiting">Vomiting</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="diarrhea" name="abdomen" value="diarrhea">
+                                <label for="diarrhea">Diarrhea</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="constipation" name="abdomen" value="constipation">
+                                <label for="constipation">Constipation</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="bloating" name="abdomen" value="bloating">
+                                <label for="bloating">Bloating</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="acidReflux" name="abdomen" value="acidReflux">
+                                <label for="acidReflux">Acid Reflux</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="appetiteLoss" name="abdomen" value="appetiteLoss">
+                                <label for="appetiteLoss">Loss of Appetite</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Pain Location & Type:</label>
+                            <textarea id="abdomenPainLocation" placeholder="Upper/lower abdomen? Left/right side? Sharp, dull, cramping? Scale 1-10"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Bowel Movement Issues:</label>
+                            <textarea id="bowelIssues" placeholder="Frequency? Color? Blood or mucus? Unusual odor?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Abdominal Region Details (Duration, Food Triggers, Pattern):</label>
+                        <textarea id="abdomenDetails" placeholder="When did it start? Related to meals? Better or worse at certain times? Any weight changes?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Waist/Lower Back/Pelvic Region -->
+                <div class="form-section">
+                    <h3><span class="body-icon">🦴</span> Waist, Lower Back & Pelvic Region</h3>
+                    
+                    <div class="form-group">
+                        <label>Lower Back/Waist Symptoms:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="backPain" name="waist" value="backPain">
+                                <label for="backPain">Lower Back Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="kidneyPain" name="waist" value="kidneyPain">
+                                <label for="kidneyPain">Kidney Area Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="urinaryIssues" name="waist" value="urinaryIssues">
+                                <label for="urinaryIssues">Urinary Problems</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="pelvicPain" name="waist" value="pelvicPain">
+                                <label for="pelvicPain">Pelvic Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="hipPain" name="waist" value="hipPain">
+                                <label for="hipPain">Hip Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="numbness" name="waist" value="numbness">
+                                <label for="numbness">Numbness/Tingling</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Urinary System Details:</label>
+                            <textarea id="urinaryDetails" placeholder="Frequency? Pain/burning? Color? Blood? Urgency? Incontinence?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Reproductive System Issues (if applicable):</label>
+                            <textarea id="reproductiveIssues" placeholder="Menstrual irregularities? Discharge? Pain during intercourse? Swelling?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Waist/Pelvic Region Details (Duration, Movement Impact):</label>
+                        <textarea id="waistDetails" placeholder="Pain level? Radiating down legs? Worse with sitting/standing? Any injuries?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Legs & Feet -->
+                <div class="form-section">
+                    <h3><span class="body-icon">🦵</span> Legs, Knees, Ankles & Feet</h3>
+                    
+                    <div class="form-group">
+                        <label>Lower Extremity Symptoms:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="legPain" name="legs" value="legPain">
+                                <label for="legPain">Leg Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="swelling" name="legs" value="swelling">
+                                <label for="swelling">Swelling</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="varicoseVeins" name="legs" value="varicoseVeins">
+                                <label for="varicoseVeins">Varicose Veins</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="cramping" name="legs" value="cramping">
+                                <label for="cramping">Muscle Cramping</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="weakness" name="legs" value="weakness">
+                                <label for="weakness">Weakness</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="jointPain" name="legs" value="jointPain">
+                                <label for="jointPain">Joint Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="footPain" name="legs" value="footPain">
+                                <label for="footPain">Foot Pain</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Mobility Issues:</label>
+                            <textarea id="mobilityIssues" placeholder="Difficulty walking? Limping? Stiffness? Range of motion problems?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Circulation Problems:</label>
+                            <textarea id="circulationIssues" placeholder="Cold feet? Color changes? Numbness? Tingling sensations?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Legs/Feet Region Details (Duration, Activity Impact):</label>
+                        <textarea id="legsDetails" placeholder="Pain level? Worse with activity or rest? Any injuries? Swelling timing?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Arms & Hands -->
+                <div class="form-section">
+                    <h3><span class="body-icon">💪</span> Arms, Shoulders, Hands & Fingers</h3>
+                    
+                    <div class="form-group">
+                        <label>Upper Extremity Symptoms:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="armPain" name="arms" value="armPain">
+                                <label for="armPain">Arm Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="shoulderPain" name="arms" value="shoulderPain">
+                                <label for="shoulderPain">Shoulder Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="handPain" name="arms" value="handPain">
+                                <label for="handPain">Hand/Wrist Pain</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fingerNumb" name="arms" value="fingerNumb">
+                                <label for="fingerNumb">Finger Numbness</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="armWeak" name="arms" value="armWeak">
+                                <label for="armWeak">Arm Weakness</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="tremors" name="arms" value="tremors">
+                                <label for="tremors">Tremors/Shaking</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Joint/Movement Issues:</label>
+                            <textarea id="armJointIssues" placeholder="Stiffness? Reduced range? Clicking sounds? Swelling?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Hand Function Problems:</label>
+                            <textarea id="handFunction" placeholder="Grip strength? Fine motor skills? Dropping things? Writing difficulties?"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Arms/Hands Region Details (Duration, Daily Activity Impact):</label>
+                        <textarea id="armsDetails" placeholder="Pain level? Worse with certain movements? Any injuries? Dominant hand affected?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Skin & General -->
+                <div class="form-section">
+                    <h3><span class="body-icon">🧴</span> Skin, Hair & General Systemic Symptoms</h3>
+                    
+                    <div class="form-group">
+                        <label>Skin/Hair Symptoms:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="rash" name="skin" value="rash">
+                                <label for="rash">Rash/Itching</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="lesions" name="skin" value="lesions">
+                                <label for="lesions">Lesions/Sores</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="discoloration" name="skin" value="discoloration">
+                                <label for="discoloration">Skin Discoloration</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="hairLoss" name="skin" value="hairLoss">
+                                <label for="hairLoss">Hair Loss</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="dryness" name="skin" value="dryness">
+                                <label for="dryness">Excessive Dryness</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="sweating" name="skin" value="sweating">
+                                <label for="sweating">Excessive Sweating</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>General Systemic Symptoms:</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fever" name="general" value="fever">
+                                <label for="fever">Fever/Chills</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="fatigue" name="general" value="fatigue">
+                                <label for="fatigue">Fatigue/Weakness</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="weightChange" name="general" value="weightChange">
+                                <label for="weightChange">Weight Changes</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="nightSweats" name="general" value="nightSweats">
+                                <label for="nightSweats">Night Sweats</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="sleepIssues" name="general" value="sleepIssues">
+                                <label for="sleepIssues">Sleep Problems</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="anxiety" name="general" value="anxiety">
+                                <label for="anxiety">Anxiety/Depression</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Skin Details:</label>
+                            <textarea id="skinDetails" placeholder="Location? Duration? Spreading? Painful? Changes over time?"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Energy & Sleep:</label>
+                            <textarea id="energyDetails" placeholder="Sleep hours? Quality? Energy levels throughout day? Mood changes?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical History & Lifestyle -->
+                <div class="form-section">
+                    <h3><span class="body-icon">📋</span> Medical History & Lifestyle Factors</h3>
+                    
+                    <div class="form-group">
+                        <label>Previous Medical Conditions:</label>
+                        <textarea id="medicalHistory" placeholder="Chronic diseases, past surgeries, hospitalizations, diagnosed conditions"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Current Medications & Supplements:</label>
+                        <textarea id="medications" placeholder="List all medications, dosages, vitamins, herbal supplements"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Allergies (Food, Drug, Environmental):</label>
+                        <textarea id="allergies" placeholder="Any known allergies and reactions"></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Family Medical History:</label>
+                            <textarea id="familyHistory" placeholder="Genetic conditions, chronic diseases in family members"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Lifestyle Factors:</label>
+                            <textarea id="lifestyle" placeholder="Smoking, alcohol use, exercise routine, stress levels, occupation"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Diet & Nutrition:</label>
+                            <textarea id="diet" placeholder="Typical diet, special diets, water intake, recent diet changes"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Overall Symptom Timeline:</label>
+                            <textarea id="timeline" required placeholder="When did symptoms begin? How have they progressed? Any triggers noticed?"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="submitDiagnosis()">🔬 Submit for AI Analysis</button>
+            </div>
+
+            <!-- Doctor Portal Form -->
+            <div id="doctorForm" class="diagnosis-form">
+                <h2 style="color: #2d5016; margin-bottom: 20px;">⚕️ Doctor Portal - Diagnosis Review & Treatment Protocol</h2>
+                
+                <div class="info-box">
+                    🔐 <strong>Secure Access:</strong> This portal is for authorized medical professionals only. Our system combines AI diagnostic capabilities with human medical expertise to deliver the most precise treatment protocols. Enter valid credentials to access patient diagnosis reports and collaborate with our AI-assisted treatment planning system.
+                </div>
+
+                <div class="form-section">
+                    <h3>Access Patient Diagnosis</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Patient Diagnosis Code: *</label>
+                            <input type="text" id="doctorCode" required placeholder="AY-XXXXXXXXX">
+                        </div>
+                        <div class="form-group">
+                            <label>Doctor ID/License: *</label>
+                            <input type="text" id="doctorId" required placeholder="Your medical license number">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Access PIN:</label>
+                        <input type="password" id="accessPin" placeholder="4-digit PIN">
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="loadDiagnosisForDoctor()">📋 Load Diagnosis & Generate Treatment Protocol</button>
+            </div>
+
+            <!-- Loading Animation -->
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <h3 style="color: #2d5016;">AI System Processing...</h3>
+                                    <div class="loading-steps">
+                    <div class="loading-step" id="step1">⏳ Analyzing patient data across all body systems...</div>
+                    <div class="loading-step" id="step2">🔍 Cross-referencing with global medical databases and professional protocols...</div>
+                    <div class="loading-step" id="step3">🧬 Matching symptoms with conditions using AI and expert medical knowledge...</div>
+                    <div class="loading-step" id="step4">💊 Generating evidence-based treatment recommendations...</div>
+                    <div class="loading-step" id="step5">📊 Compiling comprehensive report with professional medical insights...</div>
+                </div>
+            </div>
+
+            <!-- Results Display -->
+            <div id="results" class="results">
+                <div class="result-header">
+                    <h2>🎯 Comprehensive Diagnosis Report</h2>
+                    <div class="code-display" id="generatedCode"></div>
+                    <p style="margin-top: 10px; font-size: 0.95em; opacity: 0.95;">Generated by Ayuka Yamo AI Diagnostic System | Evaluated with Professional Medical Protocols</p>
+                </div>
+
+                <div class="warning-box" id="clientWarning" style="display: none;">
+                    ⚠️ <strong>Important Notice:</strong> This is a preliminary AI-generated diagnosis based on the information provided and evaluated against professional medical protocols. Our system combines advanced artificial intelligence with treatment methodologies developed by experienced physicians in homeopathy, allopathy, and naturopathy. Please schedule a consultation with our doctors to confirm these findings and receive personalized medical advice tailored to your specific condition.
+                </div>
+
+                <div class="result-section">
+                    <h3>👤 Patient Profile</h3>
+                    <div id="patientInfo"></div>
+                </div>
+
+                <div class="result-section">
+                    <h3>🔍 Primary Diagnosis & Findings</h3>
+                    <div id="diagnosisResult"></div>
+                </div>
+
+                <div class="result-section">
+                    <h3>📝 Condition Description & Pathology</h3>
+                    <div id="conditionDescription"></div>
+                </div>
+
+                <div class="result-section">
+                    <h3>🩺 Body System Analysis Summary</h3>
+                    <div id="bodySystemSummary"></div>
+                </div>
+
+                <div class="result-section">
+                    <h3>⚕️ General Health Assessment</h3>
+                    <div id="generalReport"></div>
+                </div>
+
+                <div id="treatmentSection" style="display: none;">
+                    <div class="treatment-protocol">
+                        <h2 style="color: #2d5016; margin-bottom: 20px;">💊 Comprehensive Treatment Protocol</h2>
+                        <p style="background: #fff3cd; padding: 20px; border-radius: 8px; margin-bottom: 20px; line-height: 1.6;">
+                            <strong>⚠️ Professional Medical Review Required:</strong> This treatment protocol is generated by our AI system based on evidence-based medical practices and protocols developed by physicians with extensive experience in integrated medicine. It combines homeopathic, allopathic, and naturopathic approaches. This protocol must be reviewed, modified, and approved by the attending physician before implementation to ensure it is appropriately tailored to the patient's specific needs and circumstances.
+                        </p>
+                        
+                        <div class="treatment-card">
+                            <h3 style="color: #4a7c2c; margin-bottom: 15px;">🌿 Homeopathic Treatment Approach</h3>
+                            <div id="homeopathicTreatment"></div>
+                        </div>
+
+                        <div class="treatment-card">
+                            <h3 style="color: #4a7c2c; margin-bottom: 15px;">💊 Allopathic (Conventional) Treatment</h3>
+                            <div id="allopathicTreatment"></div>
+                        </div>
+
+                        <div class="treatment-card">
+                            <h3 style="color: #4a7c2c; margin-bottom: 15px;">🌱 Naturopathic & Lifestyle Interventions</h3>
+                            <div id="naturopathicTreatment"></div>
+                        </div>
+
+                        <div class="treatment-card">
+                            <h3 style="color: #4a7c2c; margin-bottom: 15px;">🧘 Recommended Therapies</h3>
+                            <div id="therapies"></div>
+                        </div>
+
+                        <div class="treatment-card">
+                            <h3 style="color: #4a7c2c; margin-bottom: 15px;">⏱️ Treatment Duration & Follow-up</h3>
+                            <div id="duration"></div>
+                        </div>
+
+                        <div class="treatment-card">
+                            <h3 style="color: #4a7c2c; margin-bottom: 15px;">💰 Estimated Treatment Costs</h3>
+                            <div id="costs"></div>
+                        </div>
+
+                        <div style="margin-top: 20px; padding: 20px; background: #e8f5e9; border-radius: 8px; border-left: 4px solid #4a7c2c;">
+                            <h4 style="color: #2d5016;">📝 Doctor's Notes Section</h4>
+                            <textarea style="width: 100%; min-height: 100px; margin-top: 10px; padding: 10px; border: 2px solid #4a7c2c; border-radius: 8px;" placeholder="Doctor can add notes, modifications, or specific instructions here..."></textarea>
+                            <button style="margin-top: 10px; padding: 10px 20px; background: #4a7c2c; color: white; border: none; border-radius: 8px; cursor: pointer;" onclick="alert('Treatment protocol approved and saved!')">✅ Approve & Save Protocol</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
+                    <button class="new-diagnosis-btn" onclick="resetForm()">🔄 New Diagnosis</button>
+                    <button class="new-diagnosis-btn" onclick="alert('Generating PDF report...')">📄 Download PDF Report</button>
+                    <button class="new-diagnosis-btn" onclick="alert('Sending to doctor...')">📧 Send to Doctor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = null;
+        let loadingInterval = null;
+
+        function selectMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.mode-card').classList.add('selected');
+
+            document.getElementById('clientForm').classList.remove('active');
+            document.getElementById('doctorForm').classList.remove('active');
+            document.getElementById('results').classList.remove('active');
+
+            if (mode === 'client') {
+                document.getElementById('clientForm').classList.add('active');
+            } else {
+                document.getElementById('doctorForm').classList.add('active');
+            }
+        }
+
+        function gatherSymptoms() {
+            const symptoms = {
+                head: [],
+                chest: [],
+                abdomen: [],
+                waist: [],
+                legs: [],
+                arms: [],
+                skin: [],
+                general: []
+            };
+
+            // Gather checkbox symptoms
+            ['head', 'chest', 'abdomen', 'waist', 'legs', 'arms', 'skin', 'general'].forEach(category => {
+                document.querySelectorAll(`input[name="${category}"]:checked`).forEach(cb => {
+                    symptoms[category].push(cb.value);
+                });
+            });
+
+            return symptoms;
+        }
+
+        function animateLoading() {
+            const steps = ['step1', 'step2', 'step3', 'step4', 'step5'];
+            let currentStep = 0;
+
+            loadingInterval = setInterval(() => {
+                if (currentStep > 0) {
+                    document.getElementById(steps[currentStep - 1]).classList.remove('active');
+                }
+                if (currentStep < steps.length) {
+                    document.getElementById(steps[currentStep]).classList.add('active');
+                    currentStep++;
+                } else {
+                    clearInterval(loadingInterval);
+                }
+            }, 2000);
+        }
+
+        async function submitDiagnosis() {
+            // Gather basic info
+            const patientName = document.getElementById('patientName').value;
+            const age = document.getElementById('age').value;
+            const gender = document.getElementById('gender').value;
+            const weight = document.getElementById('weight').value;
+            const height = document.getElementById('height').value;
+            const timeline = document.getElementById('timeline').value;
+
+            if (!patientName || !age || !gender || !timeline) {
+                alert('Please fill in all required fields marked with *');
+                return;
+            }
+
+            // Gather all detailed symptom data
+            const symptoms = gatherSymptoms();
+            const detailedData = {
+                head: {
+                    symptoms: symptoms.head,
+                    vision: document.getElementById('visionIssues').value,
+                    hearing: document.getElementById('hearingIssues').value,
+                    nose: document.getElementById('noseIssues').value,
+                    mouth: document.getElementById('mouthIssues').value,
+                    details: document.getElementById('headDetails').value
+                },
+                chest: {
+                    symptoms: symptoms.chest,
+                    breathing: document.getElementById('breathingDetails').value,
+                    cough: document.getElementById('coughDetails').value,
+                    details: document.getElementById('chestDetails').value
+                },
+                abdomen: {
+                    symptoms: symptoms.abdomen,
+                    painLocation: document.getElementById('abdomenPainLocation').value,
+                    bowel: document.getElementById('bowelIssues').value,
+                    details: document.getElementById('abdomenDetails').value
+                },
+                waist: {
+                    symptoms: symptoms.waist,
+                    urinary: document.getElementById('urinaryDetails').value,
+                    reproductive: document.getElementById('reproductiveIssues').value,
+                    details: document.getElementById('waistDetails').value
+                },
+                legs: {
+                    symptoms: symptoms.legs,
+                    mobility: document.getElementById('mobilityIssues').value,
+                    circulation: document.getElementById('circulationIssues').value,
+                    details: document.getElementById('legsDetails').value
+                },
+                arms: {
+                    symptoms: symptoms.arms,
+                    joints: document.getElementById('armJointIssues').value,
+                    function: document.getElementById('handFunction').value,
+                    details: document.getElementById('armsDetails').value
+                },
+                skin: {
+                    symptoms: symptoms.skin,
+                    details: document.getElementById('skinDetails').value
+                },
+                general: {
+                    symptoms: symptoms.general,
+                    energy: document.getElementById('energyDetails').value
+                },
+                medical: {
+                    history: document.getElementById('medicalHistory').value,
+                    medications: document.getElementById('medications').value,
+                    allergies: document.getElementById('allergies').value,
+                    familyHistory: document.getElementById('familyHistory').value,
+                    lifestyle: document.getElementById('lifestyle').value,
+                    diet: document.getElementById('diet').value
+                }
+            };
+
+            // Show loading
+            document.getElementById('clientForm').style.display = 'none';
+            document.getElementById('loading').classList.add('active');
+            animateLoading();
+
+            try {
+                const response = await fetch("https://api.anthropic.com/v1/messages", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        model: "claude-sonnet-4-20250514",
+                        max_tokens: 1000,
+                        messages: [{
+                            role: "user",
+                            content: `You are an advanced medical AI diagnostic system specializing in comprehensive health analysis. Analyze the following detailed patient information organized by body systems and provide a thorough diagnosis.
+
+PATIENT PROFILE:
+- Name: ${patientName}
+- Age: ${age}, Gender: ${gender}
+- Weight: ${weight}kg, Height: ${height}cm
+- Timeline: ${timeline}
+
+BODY SYSTEM ANALYSIS:
+
+HEAD & NEUROLOGICAL:
+Symptoms: ${symptoms.head.join(', ') || 'None reported'}
+Vision: ${detailedData.head.vision || 'None'}
+Hearing: ${detailedData.head.hearing || 'None'}
+Nose/Sinus: ${detailedData.head.nose || 'None'}
+Mouth/Throat: ${detailedData.head.mouth || 'None'}
+Details: ${detailedData.head.details || 'None'}
+
+CHEST/RESPIRATORY/CARDIAC:
+Symptoms: ${symptoms.chest.join(', ') || 'None reported'}
+Breathing: ${detailedData.chest.breathing || 'None'}
+Cough: ${detailedData.chest.cough || 'None'}
+Details: ${detailedData.chest.details || 'None'}
+
+ABDOMINAL/DIGESTIVE:
+Symptoms: ${symptoms.abdomen.join(', ') || 'None reported'}
+Pain Location: ${detailedData.abdomen.painLocation || 'None'}
+Bowel: ${detailedData.abdomen.bowel || 'None'}
+Details: ${detailedData.abdomen.details || 'None'}
+
+WAIST/PELVIC/URINARY:
+Symptoms: ${symptoms.waist.join(', ') || 'None reported'}
+Urinary: ${detailedData.waist.urinary || 'None'}
+Reproductive: ${detailedData.waist.reproductive || 'None'}
+Details: ${detailedData.waist.details || 'None'}
+
+LEGS/FEET:
+Symptoms: ${symptoms.legs.join(', ') || 'None reported'}
+Mobility: ${detailedData.legs.mobility || 'None'}
+Circulation: ${detailedData.legs.circulation || 'None'}
+Details: ${detailedData.legs.details || 'None'}
+
+ARMS/HANDS:
+Symptoms: ${symptoms.arms.join(', ') || 'None reported'}
+Joints: ${detailedData.arms.joints || 'None'}
+Function: ${detailedData.arms.function || 'None'}
+Details: ${detailedData.arms.details || 'None'}
+
+SKIN/SYSTEMIC:
+Skin Symptoms: ${symptoms.skin.join(', ') || 'None'}
+General Symptoms: ${symptoms.general.join(', ') || 'None'}
+Skin Details: ${detailedData.skin.details || 'None'}
+Energy: ${detailedData.general.energy || 'None'}
+
+MEDICAL HISTORY:
+History: ${detailedData.medical.history || 'None'}
+Medications: ${detailedData.medical.medications || 'None'}
+Allergies: ${detailedData.medical.allergies || 'None'}
+Family History: ${detailedData.medical.familyHistory || 'None'}
+Lifestyle: ${detailedData.medical.lifestyle || 'None'}
+Diet: ${detailedData.medical.diet || 'None'}
+
+Provide ONLY a JSON response with this structure:
+{
+  "primary_diagnosis": "Main condition",
+  "secondary_diagnoses": ["condition2", "condition3"],
+  "confidence_level": "High/Medium/Low",
+  "affected_body_systems": ["system1", "system2"],
+  "description": "Detailed medical description",
+  "pathophysiology": "How the condition develops",
+  "general_report": "Overall health assessment",
+  "risk_factors": ["factor1", "factor2"],
+  "homeopathic_treatment": "Detailed homeopathic remedies and approach",
+  "allopathic_treatment": "Conventional medical treatment plan",
+  "naturopathic_treatment": "Natural and lifestyle interventions",
+  "recommended_therapies": ["therapy1", "therapy2"],
+  "estimated_duration": "Treatment timeline",
+  "follow_up_schedule": "Recommended follow-up",
+  "estimated_cost_range": "Cost estimate in USD",
+  "lifestyle_modifications": ["modification1", "modification2"],
+  "red_flags": "Warning signs to watch for"
+}`
+                        }]
+                    })
+                });
+
+                const data = await response.json();
+                clearInterval(loadingInterval);
+                
+                const aiResponse = data.content.find(item => item.type === "text")?.text || "";
+                const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+                const diagnosis = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+
+                if (diagnosis) {
+                    const diagnosisCode = document.getElementById('diagnosisCode').value;
+                    displayResults(diagnosis, {
+                        patientName, age, gender, weight, height, timeline
+                    }, detailedData, diagnosisCode);
+                } else {
+                    throw new Error("Invalid AI response format");
+                }
+
+            } catch (error) {
+                console.error('Diagnosis error:', error);
+                clearInterval(loadingInterval);
+                alert('An error occurred during diagnosis. Please check your internet connection and try again.');
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('clientForm').style.display = 'block';
+            }
+        }
+
+        function displayResults(diagnosis, patientData, detailedData, code) {
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('results').classList.add('active');
+
+            const generatedCode = code || 'AY-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).substr(2, 5).toUpperCase();
+            document.getElementById('generatedCode').innerHTML = `<strong>Diagnosis Code:</strong> ${generatedCode}<br><small>Save this code for doctor consultations</small>`;
+
+            if (currentMode === 'client') {
+                document.getElementById('clientWarning').style.display = 'block';
+            }
+
+            // Patient Info
+            document.getElementById('patientInfo').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                    <div><strong>Name:</strong> ${patientData.patientName}</div>
+                    <div><strong>Age:</strong> ${patientData.age} years</div>
+                    <div><strong>Gender:</strong> ${patientData.gender}</div>
+                    ${patientData.weight ? `<div><strong>Weight:</strong> ${patientData.weight}kg</div>` : ''}
+                    ${patientData.height ? `<div><strong>Height:</strong> ${patientData.height}cm</div>` : ''}
+                </div>
+                <div style="margin-top: 15px;">
+                    <strong>Symptom Timeline:</strong> ${patientData.timeline}
+                </div>
+            `;
+
+            // Diagnosis Result
+            document.getElementById('diagnosisResult').innerHTML = `
+                <div style="background: white; padding: 20px; border-radius: 8px;">
+                    <h4 style="color: #4a7c2c; font-size: 1.5em; margin-bottom: 10px;">${diagnosis.primary_diagnosis}</h4>
+                    <p style="margin: 10px 0;"><strong>Confidence Level:</strong> 
+                        <span style="padding: 5px 15px; border-radius: 20px; background: ${diagnosis.confidence_level === 'High' ? '#4caf50' : diagnosis.confidence_level === 'Medium' ? '#ff9800' : '#f44336'}; color: white;">
+                            ${diagnosis.confidence_level}
+                        </span>
+                    </p>
+                    ${diagnosis.secondary_diagnoses && diagnosis.secondary_diagnoses.length > 0 ? `
+                        <div style="margin-top: 15px;">
+                            <strong>Secondary Conditions:</strong>
+                            <ul style="margin-top: 5px;">
+                                ${diagnosis.secondary_diagnoses.map(d => `<li>${d}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                    ${diagnosis.affected_body_systems ? `
+                        <p style="margin-top: 15px;"><strong>Affected Body Systems:</strong> ${diagnosis.affected_body_systems.join(', ')}</p>
+                    ` : ''}
+                </div>
+            `;
+
+            // Condition Description
+            document.getElementById('conditionDescription').innerHTML = `
+                <p style="line-height: 1.8;">${diagnosis.description}</p>
+                ${diagnosis.pathophysiology ? `
+                    <div style="margin-top: 20px; padding: 15px; background: #f0f8f0; border-radius: 8px;">
+                        <strong style="color: #2d5016;">Pathophysiology (How it develops):</strong>
+                        <p style="margin-top: 10px;">${diagnosis.pathophysiology}</p>
+                    </div>
+                ` : ''}
+            `;
+
+            // Body System Summary
+            const bodySummary = [];
+            if (detailedData.head.symptoms.length > 0 || detailedData.head.details) bodySummary.push('<strong>Head/Neurological:</strong> Issues detected');
+            if (detailedData.chest.symptoms.length > 0 || detailedData.chest.details) bodySummary.push('<strong>Chest/Respiratory:</strong> Issues detected');
+            if (detailedData.abdomen.symptoms.length > 0 || detailedData.abdomen.details) bodySummary.push('<strong>Digestive:</strong> Issues detected');
+            if (detailedData.waist.symptoms.length > 0 || detailedData.waist.details) bodySummary.push('<strong>Pelvic/Urinary:</strong> Issues detected');
+            if (detailedData.legs.symptoms.length > 0 || detailedData.legs.details) bodySummary.push('<strong>Lower Extremities:</strong> Issues detected');
+            if (detailedData.arms.symptoms.length > 0 || detailedData.arms.details) bodySummary.push('<strong>Upper Extremities:</strong> Issues detected');
+            
+            document.getElementById('bodySystemSummary').innerHTML = bodySummary.length > 0 ? bodySummary.join('<br>') : 'No specific body system issues reported';
+
+            // General Report
+            document.getElementById('generalReport').innerHTML = `
+                <p style="line-height: 1.8;">${diagnosis.general_report}</p>
+                ${diagnosis.risk_factors && diagnosis.risk_factors.length > 0 ? `
+                    <div style="margin-top: 15px; padding: 15px; background: #fff3cd; border-radius: 8px;">
+                        <strong>Risk Factors Identified:</strong>
+                        <ul style="margin-top: 10px;">
+                            ${diagnosis.risk_factors.map(r => `<li>${r}</li>`).join('')}
+                        </ul>
+                    </div>
+                ` : ''}
+                ${diagnosis.red_flags ? `
+                    <div style="margin-top: 15px; padding: 15px; background: #ffebee; border-left: 4px solid #f44336; border-radius: 8px;">
+                        <strong style="color: #c62828;">⚠️ Warning Signs to Monitor:</strong>
+                        <p style="margin-top: 10px;">${diagnosis.red_flags}</p>
+                    </div>
+                ` : ''}
+            `;
+
+            // Treatment Section (Doctor Mode)
+            if (currentMode === 'doctor') {
+                document.getElementById('treatmentSection').style.display = 'block';
+                
+                document.getElementById('homeopathicTreatment').innerHTML = `<p style="line-height: 1.8;">${diagnosis.homeopathic_treatment}</p>`;
+                document.getElementById('allopathicTreatment').innerHTML = `<p style="line-height: 1.8;">${diagnosis.allopathic_treatment}</p>`;
+                document.getElementById('naturopathicTreatment').innerHTML = `
+                    <p style="line-height: 1.8;">${diagnosis.naturopathic_treatment}</p>
+                    ${diagnosis.lifestyle_modifications && diagnosis.lifestyle_modifications.length > 0 ? `
+                        <div style="margin-top: 15px;">
+                            <strong>Lifestyle Modifications:</strong>
+                            <ul style="margin-top: 10px;">
+                                ${diagnosis.lifestyle_modifications.map(m => `<li>${m}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                `;
+
+                document.getElementById('therapies').innerHTML = diagnosis.recommended_therapies ? `
+                    <ul>${diagnosis.recommended_therapies.map(t => `<li>${t}</li>`).join('')}</ul>
+                ` : '<p>No specific therapies recommended at this time</p>';
+
+                document.getElementById('duration').innerHTML = `
+                    <p><strong>Estimated Treatment Duration:</strong> ${diagnosis.estimated_duration}</p>
+                    <p style="margin-top: 10px;"><strong>Follow-up Schedule:</strong> ${diagnosis.follow_up_schedule || 'To be determined by physician'}</p>
+                `;
+
+                document.getElementById('costs').innerHTML = `
+                    <p><strong>Estimated Range:</strong> ${diagnosis.estimated_cost_range}</p>
+                    <p style="margin-top: 10px; font-size: 0.9em; color: #666;"><em>Note: Actual costs may vary based on treatment duration, medications, and therapies chosen. Final costs to be discussed during consultation.</em></p>
+                `;
+            }
+        }
+
+        async function loadDiagnosisForDoctor() {
+            const code = document.getElementById('doctorCode').value;
+            const doctorId = document.getElementById('doctorId').value;
+            const pin = document.getElementById('accessPin').value;
+
+            if (!code || !doctorId) {
+                alert('Please enter both diagnosis code and doctor ID');
+                return;
+            }
+
+            currentMode = 'doctor';
+            alert('In production, this would retrieve the stored diagnosis from the database. For this demo, please use the Client Diagnosis first to generate a report, then the treatment protocol will be automatically displayed.');
+        }
+
+        function resetForm() {
+            document.getElementById('results').classList.remove('active');
+            document.getElementById('clientForm').reset();
+            document.getElementById('doctorForm').reset();
+            currentMode = null;
+            
+            // Reset checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            
+            // Reset mode cards
+            document.querySelectorAll('.mode-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            document.getElementById('clientForm').classList.remove('active');
+            document.getElementById('doctorForm').classList.remove('active');
+            
+            // Reset loading steps
+            document.querySelectorAll('.loading-step').forEach(step => step.classList.remove('active'));
+        }
+    </script>
+</body>
+</html>
