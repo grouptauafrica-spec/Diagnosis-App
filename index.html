@@ -7,7 +7,13 @@
     <meta name="theme-color" content="#4a7c2c">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <title>Ayuka Yamo Specialized Diagnosis Friend</title>
+    <title>Ayuka Yamo Specialized Diagnosis Application</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("ynxh9_yo3dREGlzOe"); // Get from EmailJS dashboard
+  })();
+</script>
     <style>
         * {
             margin: 0;
@@ -1552,42 +1558,56 @@ Please conduct deep research and cross-reference with medical databases to provi
         }
 
         function sendEmailNotification(patientData, diagnosis) {
-            // Generate email HTML from template
-            const emailHTML = generateEmailHTML(patientData, diagnosis);
-            
-            // Prepare email data
-            const emailData = {
-                to_organization: 'grouptauafrica@gmail.com',
-                to_applicant: patientData.applicantEmail,
-                subject: `Ayuka Yamo Diagnosis Report - ${patientData.patientName}`,
-                html: emailHTML,
-                diagnosis_code: 'AY-' + Date.now().toString(36).toUpperCase(),
-                patient_name: patientData.patientName,
-                timestamp: new Date().toLocaleString()
-            };
-            
-            // Store diagnosis data for retrieval
-            const diagnosisRecord = {
-                code: emailData.diagnosis_code,
-                patient: patientData,
-                diagnosis: diagnosis,
-                timestamp: emailData.timestamp,
-                emailHTML: emailHTML
-            };
-            
-            // Save to localStorage for later retrieval
-            localStorage.setItem('latest_diagnosis', JSON.stringify(diagnosisRecord));
-            
-            // In production, send via backend API
-            console.log('Email notification prepared:', emailData);
-            
-            // Show confirmation with actual email content preview
-            setTimeout(() => {
-                alert(`✅ Diagnosis Report Generated!\n\n📧 Email will be sent to:\n- Organization: grouptauafrica@gmail.com\n- Patient: ${patientData.applicantEmail}\n\n💾 Diagnosis Code: ${emailData.diagnosis_code}\n\nSave this code for future reference!`);
-            }, 1000);
-            
-            return diagnosisRecord;
-        }
+    const diagnosisCode = 'AY-' + Date.now().toString(36).toUpperCase();
+    
+    // Prepare template parameters
+    const templateParams = {
+        diagnosis_code: diagnosisCode,
+        timestamp: new Date().toLocaleString(),
+        patient_name: patientData.patientName,
+        age: patientData.age,
+        gender: patientData.gender,
+        email: patientData.applicantEmail,
+        phone: patientData.phoneNumber || 'Not provided',
+        payment_code: patientData.paymentCode,
+        
+        // Diagnosis
+        primary_diagnosis: diagnosis.primary_diagnosis,
+        confidence: diagnosis.confidence_level,
+        description: diagnosis.description,
+        general_report: diagnosis.general_report,
+        
+        // Treatments
+        homeopathic: diagnosis.homeopathic_treatment,
+        allopathic: diagnosis.allopathic_treatment,
+        naturopathic: diagnosis.naturopathic_treatment,
+        duration: diagnosis.estimated_duration,
+        cost: diagnosis.estimated_cost_range,
+        
+        // Warning
+        red_flags: diagnosis.red_flags || 'Consult doctor if symptoms worsen',
+        
+        // Recipients
+        to_email: patientData.applicantEmail,
+        org_email: 'grouptauafrica@gmail.com'
+    };
+    
+    // Send to patient
+    emailjs.send('service_2hg2dxh', 'template_hgk4zp7', templateParams)
+        .then(function(response) {
+            console.log('Email sent successfully!', response);
+            alert('✅ Diagnosis report sent to your email: ' + patientData.applicantEmail);
+        }, function(error) {
+            console.error('Email send failed:', error);
+            alert('⚠️ Email sending failed. Please download the PDF instead.');
+        });
+    
+    // Send to organization (separate call)
+    emailjs.send('service_2hg2dxh', 'template_hgk4zp7', {
+        ...templateParams,
+        to_email: 'grouptauafrica@gmail.com'
+    });
+}
 
         function generateEmailHTML(patientData, diagnosis) {
             // Get the email template and replace placeholders
