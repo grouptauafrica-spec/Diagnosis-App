@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Ayuka Yamo - AI-Powered Health Diagnosis combining professional medical expertise with advanced technology to scan and establish underlying condition">
+    <meta name="description" content="Ayuka Yamo - AI-Powered Health Diagnosis combining professional medical expertise with advanced technology">
     <meta name="theme-color" content="#4a7c2c">
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <title>Ayuka Yamo Specialized Diagnosis App</title>
+    <title>Ayuka Yamo Specialized Diagnosis Friend</title>
     <style>
         * {
             margin: 0;
@@ -460,7 +460,7 @@
             <h1>🌿 Ayuka Yamo Specialized Health Diagnosis Application</h1>
             <p>Human-AI Powered Precise Health Diagnosis System</p>
             <p style="font-size: 0.9em; margin-top: 10px;">Combining Professional Human Expertise with Advanced AI Technology</p>
-        </div>
+         </div>
 
         <div class="company-info">
             <strong>Tau-Africa</strong> | Valenta Holdings Ltd | Professional Homeopathy, Allopathy & Naturopathy Centers<br>
@@ -468,10 +468,12 @@
         </div>
 
         <div class="quick-actions">
-            <button class="quick-btn" onclick="alert('Welcome to our AY Healthcare services. Our Selfcare diagnosis is highly accurate, we give your results to the nearest truth of your health conditions, a report which can be interpreted and attended by any other standard health institution. Our Diagnosis services are acurate, pocket friendly and independent. Using our report, you chose to be treated by our doctors, our products or by your doctors or using external prescriptions. To proceed with our specialized diagnosis to get your exact health condition and underlying diseases, please pay your one-time Diagnosis fee of ksh1,500[15$] for members and ksh2,500[25$] for non members to Valenta Holdings/Health department and obtain your payment pass codes from Our Center, AY Agent or from your final Diagnosis Results. These will come handy when seeing the doctors and for your records. To proceed, tap the client button below and follow instructions. For New Doctors, create AY Agent Account and join our Intl platform doctors and benefit from our specialized diagnosis')">Read more on Diagnosis</button>
-            <button class="quick-btn" onclick="alert('Let our professionals handle your reports with accuracy!Get specialized treatment protocols')">Connect with our Doctors</button>
-            <button class="quick-btn" onclick="alert('Please go to Tau Global Marketplace for products! Visit our store')">🛒 Buy our AY Products</button>
-            <button class="quick-btn" onclick="alert('Email: grouptauafrica@gmail.com.com | Phone: +254 725 646 331')">📞 Contact AY Representatives</button>
+            <button class="quick-btn" onclick="window.open('https://magero1985.github.io/Kabiru-Mining-Portal-/Health-Services.html', '_blank')">🏥 Treatment Platform</button>
+            <div class="quick-actions">
+            <button class="quick-btn" onclick="alert('Welcome to our AY Healthcare services. Our Selfcare diagnosis is highly accurate, we give your results to the nearest truth of your health conditions, a report which can be interpreted and attended by any other standard health institution. Our Diagnosis services are acurate, pocket friendly and independent. Using our report, you chose to be treated by our doctors, our products or by your doctors or using external prescriptions. To proceed with our specialized diagnosis to get your exact health condition and underlying diseases, please pay your one-time Diagnosis fee of ksh1,500[15$] for members and ksh2,500[25$] for non members to Valenta Holdings/Health department and obtain your payment pass codes from Our Center, AY Agent or from your final Diagnosis Results. These will come handy when seeing the doctors and for your records. To proceed, tap the client button below and follow instructions. For New Doctors, create AY Agent Account and join our Intl platform doctors and benefit from our specialized diagnosis')">Process of Diagnosis</button>
+            <button class="quick-btn" onclick="alert('Let our professionals handle your Diagnosis Report with accuracy!Get our specialized 4 stage treatment protocols, the sure way to success')">Connect with our Doctors</button>
+            <button class="quick-btn" onclick="alert('Please go to Tau Global Marketplace for products! buy our AY Products and earn both Kabiru points and other AY customer benefits. Visit our store')">🛒 Buy AY Products there</button>
+            <button class="quick-btn" onclick="alert('Email: grouptauafrica@gmail.com.com | Phone: +254 725 646 331')">📞Speak to AY Agent nearest to you</button>
         </div>
 
         <div class="main-content">
@@ -1159,8 +1161,9 @@
 
                 <div style="margin-top: 30px; display: flex; gap: 15px; flex-wrap: wrap;">
                     <button class="new-diagnosis-btn" onclick="resetForm()">🔄 New Diagnosis</button>
-                    <button class="new-diagnosis-btn" onclick="alert('Generating PDF report...')">📄 Download PDF Report</button>
-                    <button class="new-diagnosis-btn" onclick="alert('Sending to doctor...')">📧 Send to Doctor</button>
+                    <button class="new-diagnosis-btn" onclick="downloadPDF()">📄 Download PDF Report</button>
+                    <button class="new-diagnosis-btn" onclick="sendToDoctor()">📧 Send to Doctor</button>
+                    <button class="new-diagnosis-btn" onclick="window.open('https://magero1985.github.io/Kabiru-Mining-Portal-/Health-Services.html', '_blank')" style="background: #2d5016;">🏥 Start Treatment</button>
                 </div>
             </div>
         </div>
@@ -1244,9 +1247,16 @@
                 return;
             }
 
-            // Validate payment code (basic validation - you can customize this)
+            // Validate payment code
             if (paymentCode.length < 6) {
                 alert('Invalid payment code. Please enter a valid payment confirmation code from Ayuka Yamo.');
+                return;
+            }
+
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(applicantEmail)) {
+                alert('Please enter a valid email address.');
                 return;
             }
 
@@ -1314,21 +1324,145 @@
             document.getElementById('loading').classList.add('active');
             animateLoading();
 
-            // Generate diagnosis using local algorithm (offline mode)
-            setTimeout(() => {
-                const diagnosis = generateOfflineDiagnosis(symptoms, detailedData, patientName, age, gender);
+            try {
+                // OPTION 1: Use Netlify Function (RECOMMENDED)
+                const apiEndpoint = '/.netlify/functions/diagnose';
+                
+                // OPTION 2: If using Vercel, change to: '/api/diagnose'
+                // OPTION 3: If using your own server: 'https://your-server.com/api/diagnose'
+
+                const response = await fetch(apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        messages: [{
+                            role: 'user',
+                            content: `You are an advanced medical AI diagnostic system specializing in comprehensive health analysis. Analyze the following detailed patient information organized by body systems and provide a thorough, accurate diagnosis with deep research.
+
+PATIENT PROFILE:
+- Name: ${patientName}
+- Age: ${age}, Gender: ${gender}
+- Weight: ${weight}kg, Height: ${height}cm
+- Timeline: ${timeline}
+- Email: ${applicantEmail}
+- Phone: ${phoneNumber}
+
+BODY SYSTEM ANALYSIS:
+
+HEAD & NEUROLOGICAL:
+Symptoms: ${symptoms.head.join(', ') || 'None reported'}
+Vision: ${detailedData.head.vision || 'None'}
+Hearing: ${detailedData.head.hearing || 'None'}
+Nose/Sinus: ${detailedData.head.nose || 'None'}
+Mouth/Throat: ${detailedData.head.mouth || 'None'}
+Details: ${detailedData.head.details || 'None'}
+
+CHEST/RESPIRATORY/CARDIAC:
+Symptoms: ${symptoms.chest.join(', ') || 'None reported'}
+Breathing: ${detailedData.chest.breathing || 'None'}
+Cough: ${detailedData.chest.cough || 'None'}
+Details: ${detailedData.chest.details || 'None'}
+
+ABDOMINAL/DIGESTIVE:
+Symptoms: ${symptoms.abdomen.join(', ') || 'None reported'}
+Pain Location: ${detailedData.abdomen.painLocation || 'None'}
+Bowel: ${detailedData.abdomen.bowel || 'None'}
+Details: ${detailedData.abdomen.details || 'None'}
+
+WAIST/PELVIC/URINARY:
+Symptoms: ${symptoms.waist.join(', ') || 'None reported'}
+Urinary: ${detailedData.waist.urinary || 'None'}
+Reproductive: ${detailedData.waist.reproductive || 'None'}
+Details: ${detailedData.waist.details || 'None'}
+
+LEGS/FEET:
+Symptoms: ${symptoms.legs.join(', ') || 'None reported'}
+Mobility: ${detailedData.legs.mobility || 'None'}
+Circulation: ${detailedData.legs.circulation || 'None'}
+Details: ${detailedData.legs.details || 'None'}
+
+ARMS/HANDS:
+Symptoms: ${symptoms.arms.join(', ') || 'None reported'}
+Joints: ${detailedData.arms.joints || 'None'}
+Function: ${detailedData.arms.function || 'None'}
+Details: ${detailedData.arms.details || 'None'}
+
+SKIN/SYSTEMIC:
+Skin Symptoms: ${symptoms.skin.join(', ') || 'None'}
+General Symptoms: ${symptoms.general.join(', ') || 'None'}
+Skin Details: ${detailedData.skin.details || 'None'}
+Energy: ${detailedData.general.energy || 'None'}
+
+MEDICAL HISTORY:
+History: ${detailedData.medical.history || 'None'}
+Medications: ${detailedData.medical.medications || 'None'}
+Allergies: ${detailedData.medical.allergies || 'None'}
+Family History: ${detailedData.medical.familyHistory || 'None'}
+Lifestyle: ${detailedData.medical.lifestyle || 'None'}
+Diet: ${detailedData.medical.diet || 'None'}
+
+Please conduct deep research and cross-reference with medical databases to provide the most accurate diagnosis possible. Provide ONLY a JSON response with this structure:
+{
+  "primary_diagnosis": "Most likely condition based on comprehensive analysis",
+  "secondary_diagnoses": ["Alternative diagnoses", "Related conditions"],
+  "confidence_level": "High/Medium/Low with justification",
+  "affected_body_systems": ["Detailed list of affected systems"],
+  "description": "Comprehensive medical description with research-backed information",
+  "pathophysiology": "Detailed explanation of how the condition develops and progresses",
+  "general_report": "Thorough overall health assessment",
+  "risk_factors": ["Identified risk factors with medical basis"],
+  "homeopathic_treatment": "Evidence-based homeopathic remedies with dosage and duration",
+  "allopathic_treatment": "Detailed conventional medical treatment plan with specific medications",
+  "naturopathic_treatment": "Comprehensive natural and lifestyle interventions",
+  "recommended_therapies": ["Specific therapeutic interventions with rationale"],
+  "estimated_duration": "Realistic treatment timeline based on condition severity",
+  "follow_up_schedule": "Detailed follow-up plan",
+  "estimated_cost_range": "Accurate cost estimate in USD",
+  "lifestyle_modifications": ["Specific, actionable lifestyle changes"],
+  "red_flags": "Critical warning signs requiring immediate attention",
+  "research_notes": "Key medical research and evidence supporting this diagnosis"
+}`
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
                 clearInterval(loadingInterval);
                 
-                const diagnosisCode = document.getElementById('diagnosisCode').value;
-                displayResults(diagnosis, {
-                    patientName, age, gender, weight, height, timeline, applicantEmail, phoneNumber, paymentCode
-                }, detailedData, diagnosisCode);
+                const aiResponse = data.content.find(item => item.type === "text")?.text || "";
+                const jsonMatch = aiResponse.match(/\{[\s\S]*\}/);
+                const diagnosis = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
+
+                if (diagnosis) {
+                    const diagnosisCode = document.getElementById('diagnosisCode').value;
+                    displayResults(diagnosis, {
+                        patientName, age, gender, weight, height, timeline, applicantEmail, phoneNumber, paymentCode
+                    }, detailedData, diagnosisCode);
+                    
+                    // Send email notification
+                    sendEmailNotification({
+                        patientName, age, gender, applicantEmail, paymentCode
+                    }, diagnosis);
+                } else {
+                    throw new Error("Invalid AI response format");
+                }
+
+            } catch (error) {
+                console.error('Diagnosis error:', error);
+                clearInterval(loadingInterval);
                 
-                // Send email notification
-                sendEmailNotification({
-                    patientName, age, gender, applicantEmail, paymentCode
-                }, diagnosis);
-            }, 10000); // 10 seconds for realistic loading
+                // Show detailed error message
+                alert(`❌ Diagnosis Failed\n\nError: ${error.message}\n\nPossible causes:\n1. Backend not configured (see setup instructions)\n2. API key not set in Netlify/Vercel\n3. Network connection issue\n4. Payment code not validated\n\nPlease check the setup guide and try again.`);
+                
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('clientForm').style.display = 'block';
+            }
         }
 
         function generateOfflineDiagnosis(symptoms, detailedData, name, age, gender) {
@@ -1418,28 +1552,185 @@
         }
 
         function sendEmailNotification(patientData, diagnosis) {
+            // Generate email HTML from template
+            const emailHTML = generateEmailHTML(patientData, diagnosis);
+            
             // Prepare email data
             const emailData = {
                 to_organization: 'grouptauafrica@gmail.com',
                 to_applicant: patientData.applicantEmail,
                 subject: `Ayuka Yamo Diagnosis Report - ${patientData.patientName}`,
+                html: emailHTML,
                 diagnosis_code: 'AY-' + Date.now().toString(36).toUpperCase(),
                 patient_name: patientData.patientName,
-                age: patientData.age,
-                gender: patientData.gender,
-                payment_code: patientData.paymentCode,
-                primary_diagnosis: diagnosis.primary_diagnosis,
                 timestamp: new Date().toLocaleString()
             };
             
-            // In production, this would send actual emails via a backend service
-            // For now, we'll show a confirmation message
+            // Store diagnosis data for retrieval
+            const diagnosisRecord = {
+                code: emailData.diagnosis_code,
+                patient: patientData,
+                diagnosis: diagnosis,
+                timestamp: emailData.timestamp,
+                emailHTML: emailHTML
+            };
+            
+            // Save to localStorage for later retrieval
+            localStorage.setItem('latest_diagnosis', JSON.stringify(diagnosisRecord));
+            
+            // In production, send via backend API
             console.log('Email notification prepared:', emailData);
             
-            // Show user confirmation
+            // Show confirmation with actual email content preview
             setTimeout(() => {
-                alert(`✅ Diagnosis report has been generated!\n\n📧 Report will be sent to:\n- Organization: grouptauafrica@gmail.com\n- Your email: ${patientData.applicantEmail}\n\n💾 Please save your diagnosis code for future reference.`);
+                alert(`✅ Diagnosis Report Generated!\n\n📧 Email will be sent to:\n- Organization: grouptauafrica@gmail.com\n- Patient: ${patientData.applicantEmail}\n\n💾 Diagnosis Code: ${emailData.diagnosis_code}\n\nSave this code for future reference!`);
             }, 1000);
+            
+            return diagnosisRecord;
+        }
+
+        function generateEmailHTML(patientData, diagnosis) {
+            // Get the email template and replace placeholders
+            const template = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; }
+        .header { background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%); color: white; padding: 30px; text-align: center; }
+        .content { padding: 30px; }
+        .section { margin-bottom: 25px; padding: 20px; background: #f9f9f9; border-left: 5px solid #4a7c2c; border-radius: 5px; }
+        .section h2 { color: #2d5016; margin-top: 0; }
+        .code-box { background: #2d5016; color: white; padding: 20px; text-align: center; font-size: 24px; font-weight: bold; margin: 20px 0; }
+        .diagnosis-box { background: #e8f5e9; padding: 20px; border: 2px solid #4a7c2c; border-radius: 8px; margin: 20px 0; }
+        .warning { background: #ffebee; border-left: 4px solid #f44336; padding: 15px; margin: 15px 0; }
+        .footer { background: #8B7355; color: white; padding: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌿 Ayuka Yamo Diagnosis Report</h1>
+            <p>Tau-Africa | Valenta Holdings Ltd</p>
+        </div>
+        
+        <div class="content">
+            <div class="code-box">DIAGNOSIS CODE: AY-${Date.now().toString(36).toUpperCase()}</div>
+            
+            <p style="text-align: center;">Generated: ${new Date().toLocaleString()}<br>Payment Code: ${patientData.paymentCode}</p>
+            
+            <div class="section">
+                <h2>👤 Patient Information</h2>
+                <p><strong>Name:</strong> ${patientData.patientName}</p>
+                <p><strong>Age:</strong> ${patientData.age} years | <strong>Gender:</strong> ${patientData.gender}</p>
+                <p><strong>Email:</strong> ${patientData.applicantEmail}</p>
+                <p><strong>Phone:</strong> ${patientData.phoneNumber || 'Not provided'}</p>
+            </div>
+            
+            <div class="diagnosis-box">
+                <h2>🎯 AI Diagnosis Results</h2>
+                <h3>Primary Diagnosis:</h3>
+                <p style="font-size: 18px; font-weight: bold;">${diagnosis.primary_diagnosis}</p>
+                <p><strong>Confidence:</strong> ${diagnosis.confidence_level}</p>
+                <p><strong>Affected Systems:</strong> ${diagnosis.affected_body_systems ? diagnosis.affected_body_systems.join(', ') : 'Multiple systems'}</p>
+                
+                <h3>Description:</h3>
+                <p>${diagnosis.description}</p>
+                
+                <h3>General Health Report:</h3>
+                <p>${diagnosis.general_report}</p>
+            </div>
+            
+            <div class="section">
+                <h2>💊 Treatment Recommendations</h2>
+                <h3>🌿 Homeopathic:</h3>
+                <p>${diagnosis.homeopathic_treatment}</p>
+                
+                <h3>💊 Allopathic:</h3>
+                <p>${diagnosis.allopathic_treatment}</p>
+                
+                <h3>🌱 Naturopathic:</h3>
+                <p>${diagnosis.naturopathic_treatment}</p>
+                
+                <p><strong>Duration:</strong> ${diagnosis.estimated_duration}</p>
+                <p><strong>Cost Range:</strong> ${diagnosis.estimated_cost_range}</p>
+            </div>
+            
+            ${diagnosis.red_flags ? `
+            <div class="warning">
+                <h3>⚠️ Warning Signs:</h3>
+                <p>${diagnosis.red_flags}</p>
+            </div>
+            ` : ''}
+            
+            <div class="section">
+                <p><strong>⚠️ Important:</strong> This is an AI-generated diagnosis. Please consult with our doctors for confirmation and personalized treatment.</p>
+                <p style="text-align: center; margin-top: 20px;">
+                    <a href="https://magero1985.github.io/Kabiru-Mining-Portal-/Health-Services.html" style="background: #4a7c2c; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">🏥 Start Treatment</a>
+                </p>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Contact Us</strong></p>
+            <p>Email: grouptauafrica@gmail.com</p>
+            <p>© 2024 Tau-Africa. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>`;
+            
+            return template;
+        }
+
+        function downloadPDF() {
+            // Get latest diagnosis from storage
+            const diagnosisData = localStorage.getItem('latest_diagnosis');
+            if (!diagnosisData) {
+                alert('No diagnosis data available. Please complete a diagnosis first.');
+                return;
+            }
+            
+            const data = JSON.parse(diagnosisData);
+            
+            // Create a printable version
+            const printWindow = window.open('', '', 'height=800,width=800');
+            printWindow.document.write(data.emailHTML);
+            printWindow.document.close();
+            
+            // Wait for content to load then print
+            setTimeout(() => {
+                printWindow.print();
+            }, 500);
+            
+            alert('📄 Opening print dialog...\n\nTip: Select "Save as PDF" as your printer to download the report.');
+        }
+
+        function sendToDoctor() {
+            const diagnosisData = localStorage.getItem('latest_diagnosis');
+            if (!diagnosisData) {
+                alert('No diagnosis data available. Please complete a diagnosis first.');
+                return;
+            }
+            
+            const data = JSON.parse(diagnosisData);
+            
+            // Create mailto link with diagnosis info
+            const subject = encodeURIComponent(`Ayuka Yamo Diagnosis - ${data.patient.patientName}`);
+            const body = encodeURIComponent(`Diagnosis Code: ${data.code}
+            
+Patient: ${data.patient.patientName}
+Age: ${data.patient.age}
+Primary Diagnosis: ${data.diagnosis.primary_diagnosis}
+
+Please review the full diagnosis report attached.
+
+View online: https://magero1985.github.io/Kabiru-Mining-Portal-/Health-Services.html`);
+            
+            window.location.href = `mailto:grouptauafrica@gmail.com?subject=${subject}&body=${body}`;
+            
+            alert('📧 Opening your email client...\n\nPlease attach the PDF report before sending.');
         }
 
         function displayResults(diagnosis, patientData, detailedData, code) {
@@ -1461,9 +1752,15 @@
                     <div><strong>Gender:</strong> ${patientData.gender}</div>
                     ${patientData.weight ? `<div><strong>Weight:</strong> ${patientData.weight}kg</div>` : ''}
                     ${patientData.height ? `<div><strong>Height:</strong> ${patientData.height}cm</div>` : ''}
+                    <div><strong>Email:</strong> ${patientData.applicantEmail}</div>
+                    ${patientData.phoneNumber ? `<div><strong>Phone:</strong> ${patientData.phoneNumber}</div>` : ''}
+                    <div><strong>Payment Code:</strong> ${patientData.paymentCode}</div>
                 </div>
                 <div style="margin-top: 15px;">
                     <strong>Symptom Timeline:</strong> ${patientData.timeline}
+                </div>
+                <div style="margin-top: 15px; padding: 15px; background: #e8f5e9; border-radius: 8px;">
+                    <strong>📧 Report Status:</strong> Diagnosis report has been sent to grouptauafrica@gmail.com and ${patientData.applicantEmail}
                 </div>
             `;
 
@@ -1580,24 +1877,36 @@
         }
 
         function resetForm() {
+            // Hide results
             document.getElementById('results').classList.remove('active');
+            
+            // Reset all form inputs
             document.getElementById('clientForm').reset();
             document.getElementById('doctorForm').reset();
-            currentMode = null;
             
             // Reset checkboxes
             document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             
-            // Reset mode cards
+            // Reset mode selection
+            currentMode = null;
             document.querySelectorAll('.mode-card').forEach(card => {
                 card.classList.remove('selected');
             });
             
+            // Hide both forms
             document.getElementById('clientForm').classList.remove('active');
             document.getElementById('doctorForm').classList.remove('active');
             
+            // Make sure client form is displayed (not hidden)
+            document.getElementById('clientForm').style.display = 'none';
+            
             // Reset loading steps
             document.querySelectorAll('.loading-step').forEach(step => step.classList.remove('active'));
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            console.log('Form reset complete - ready for new diagnosis');
         }
     </script>
 </body>
